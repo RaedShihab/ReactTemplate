@@ -1,0 +1,76 @@
+import React from 'react';
+import Index from './components/Index';
+import NavBar from './components/NavBar';
+import Contact from './components/Contact';
+import Home from './components/Home';
+import Portfolio from './components/Portfolio';
+import Profile from './components/Profile';
+import Work from './components/Work';
+import SocialMedia from './components/SocialMedia';
+import { Admin,Resource, ListGuesser, EditGuesser } from "react-admin";
+import {UserList, UserEdit, UserCreate} from './users'
+import jsonServerProvider from "ra-data-json-server";
+import axios from 'axios'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com')
+
+
+
+class App extends React.Component {
+  constructor() {
+    super()
+    this.state ={
+      name: ''
+    }
+  }
+  handle = (e)=> {
+    this.setState({
+      name: e.target.value
+    }, console.log(this.state.name))
+  }
+
+  click(e) {
+    e.preventDefault();
+    console.log('hhhhhhhh')
+      var body = {
+        firstname: this.state.name,
+        lastname: this.state.name
+      };
+      axios.post('http://localhost:3001/route/add', {
+        firstname: this.state.name,
+        lastname: this.state.name
+      })  
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  render() {
+    return (
+      <div>
+        React App
+        <button onClick={this.click.bind(this)}>dfdf</button>
+        <input onChange={this.handle} value={this.state.name}></input>
+      </div>
+      // <Admin dataProvider={dataProvider}>
+      //   <Resource 
+      //   name="users" 
+      //   list={UserList} 
+      //   edit={UserEdit}
+      //   create={UserCreate}
+      //   />
+      // </Admin>
+    );
+  }
+}
+
+export default App;
